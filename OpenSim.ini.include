@@ -1,0 +1,24 @@
+[Activity Log]
+    ;; enable / disbale module
+    Enabled = true
+
+    ;; enable / disable chat logging
+    ;LogChatsEnabled = true
+
+    ;; enable / disable presence logging
+    ;LogPresenceEnabled = true
+
+    ;; enable / disable logging of all channels versus just logging public chat (channel 0)
+    ;LogAllChannels = false
+
+    ;; message shown to users entering a region
+    ;MessageOnEntry = "Notice: All chat in this region is recorded and logged by the region owner."
+
+    ;; directory where log files are stored; use separate subdirectory (!)
+    ;LogDirectory = ./ActivityLogs
+
+    ;; number of days until old log files are deleted automatically; 0=disabled
+    ;KeepForDays = 31
+
+    ;; time interval for automatically deleting old log files
+    ;TimerInterval = 12

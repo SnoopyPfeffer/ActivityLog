@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+   <Project frameworkVersion="v3_5" name="ActivityLog" path="addon-modules/ActivityLog/Modules" type="Library">
+     <Configuration name="Debug">
+       <Options>
+         <OutputPath>../../../bin/</OutputPath>
+       </Options>
+     </Configuration>
+     <Configuration name="Release">
+       <Options>
+         <OutputPath>../../../bin/</OutputPath>
+       </Options>
+     </Configuration>
+
+     <ReferencePath>../../../bin/</ReferencePath>
+     <Reference name="Mono.Addins.dll"/>
+     <Reference name="System" localCopy="false"/>
+     <Reference name="System.Collections"/>
+     <Reference name="System.Collections.Generic"/>
+     <Reference name="System.Reflection"/>
+     <Reference name="log4net.dll"/>
+     <Reference name="Nini.dll" />
+     <Reference name="OpenMetaverse"/>
+     <Reference name="OpenMetaverseTypes"/>
+     <Reference name="OpenSim.Services.Interfaces"/>
+     <Reference name="OpenSim.Framework"/>
+     <Reference name="OpenSim.Region.Framework" />
+
+     <Files>
+       <Match pattern="*.cs" recurse="true"/>
+     </Files>
+   </Project>
