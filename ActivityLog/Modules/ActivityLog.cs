@@ -340,7 +340,7 @@ namespace OpenSim.Region.Framework.Interfaces
             
             using (StreamWriter sw = File.AppendText(LogFileName(regionID))) 
             {
-                sw.Write(DateTime.Today.ToString("yyyy-MM-dd HH:mm "));
+                sw.Write(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss "));
                 sw.WriteLine(logRecord);
             }
         }
@@ -354,12 +354,13 @@ namespace OpenSim.Region.Framework.Interfaces
         {          
             m_log.InfoFormat("[ActivityLog] Deleting log files older than {0} days...", numDays);
                         
-            string[] files = Directory.GetFiles(m_logDirectory);
+            string[] files = Directory.GetFiles(m_logDirectory, "*.log");
+            DateTime delTime = DateTime.Now.AddDays(-numDays);
             
             foreach (string file in files)
             {
                 FileInfo fi = new FileInfo(file);
-                if (fi.LastAccessTime < DateTime.Now.AddDays(-numDays))
+                if (fi.LastAccessTime < delTime)
                 {
                     fi.Delete();
                     m_log.Info(file + " deleted");
@@ -446,7 +447,7 @@ namespace OpenSim.Region.Framework.Interfaces
         {
             m_log.Info("[ActivityLog] Log Files:");
             
-            string[] files = Directory.GetFiles(m_logDirectory);
+            string[] files = Directory.GetFiles(m_logDirectory, "*.log");
             
             foreach (string file in files) m_log.Info(file);
         }
