@@ -132,7 +132,7 @@ namespace OpenSim.Region.Framework.Interfaces
                 m_timerInterval = config.GetInt("TimerInterval", 12) * 60 * 60 * 1000; // hours
                 
                 // Start timer
-                if (m_keepForDays > 0)
+                if (m_keepForDays > 0 && m_timerInterval > 0)
                 {
                     m_timer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
                     m_timer.Interval = m_timerInterval;

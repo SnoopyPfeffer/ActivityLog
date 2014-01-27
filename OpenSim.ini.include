@@ -20,5 +20,5 @@
     ;; number of days until old log files are deleted automatically; 0=disabled
     ;KeepForDays = 31
 
-    ;; time interval for automatically deleting old log files
+    ;; time interval for automatically deleting old log files; >= 1 hours
     ;TimerInterval = 12
