@@ -38,6 +38,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.IO;
 using System.Timers;
+using System.Threading;
 using log4net;
 using Nini.Config;
 using OpenMetaverse;
@@ -70,15 +71,16 @@ namespace OpenSim.Region.Framework.Interfaces
         private bool m_logPresenceEnabled = true;
         private bool m_logAllChannels = false;
         private string m_messageOnEntry = "Notice: All chat in this region is recorded and logged by the region owner.";
+        private int m_messageDelayAtLogin = 7000;  // 7 seconds
         private string m_logDirectory = "./ActivityLogs";
-        private int m_keepForDays = 31;
+        private int m_keepForDays = 31;  // 31 days
         private int m_timerInterval = 12 * 60 * 60 * 1000; // 12 hours
 
         private IConfigSource m_config;
         private bool m_first_scene = true;
         private readonly List<Scene> m_scenes = new List<Scene>();
         private readonly Dictionary<UUID, UUID> m_lastRegionID = new Dictionary<UUID, UUID>();
-        private readonly Timer m_timer = new Timer();
+        private readonly System.Timers.Timer m_timer = new System.Timers.Timer();
         
         #region ISharedRegionModule Members
 
@@ -124,10 +126,11 @@ namespace OpenSim.Region.Framework.Interfaces
                 m_logPresenceEnabled = config.GetBoolean("LogPresenceEnabled", m_logPresenceEnabled);
                 m_logAllChannels = config.GetBoolean("LogAllChannels", m_logAllChannels);
 
+                m_messageOnEntry = config.GetString("MessageOnEntry", m_messageOnEntry);
+                m_messageDelayAtLogin = config.GetInt("MessageDelayAtLogin", m_messageDelayAtLogin);
+                
                 char[] charsToTrim = {'/'};
-                m_messageOnEntry = (config.GetString("MessageOnEntry", m_messageOnEntry)).TrimEnd(charsToTrim);
-
-                m_logDirectory = config.GetString("LogDirectory", m_logDirectory);
+                m_logDirectory = (config.GetString("LogDirectory", m_logDirectory)).TrimEnd(charsToTrim);
                 m_keepForDays = config.GetInt("KeepForDays", m_keepForDays);
                 m_timerInterval = config.GetInt("TimerInterval", 12) * 60 * 60 * 1000; // hours
                 
@@ -220,6 +223,7 @@ namespace OpenSim.Region.Framework.Interfaces
 
             // Register client logout event
             client.OnLogout += ClientLogout;
+            client.OnRetrieveInstantMessages += RetrieveInstantMessages;
         }
 
         private void MakeRootAgent(ScenePresence avatar)
@@ -263,6 +267,21 @@ namespace OpenSim.Region.Framework.Interfaces
             if (m_logPresenceEnabled) LogoutRegion(agentID, regionID);
         }
 
+        private void RetrieveInstantMessages(IClientAPI client)
+        {
+            // m_log.DebugFormat("[ActivityLog]: RetrieveInstantMessages {0}", client.AgentId);
+            
+            // Show warning message
+            if (m_logChatsEnabled && m_messageOnEntry != "")
+            {
+                Util.FireAndForget(delegate
+                {
+                    Thread.Sleep(m_messageDelayAtLogin);
+                    ShowEntryMessage(client);
+                });
+            }
+        }
+        
         #endregion
 
         #region ActivityLog Functionality
