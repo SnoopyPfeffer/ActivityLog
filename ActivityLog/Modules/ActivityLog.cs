@@ -46,8 +46,8 @@ using OpenSim.Services.Interfaces;
 using OpenSim.Framework;
 using OpenSim.Region.Framework.Scenes;
 
-[assembly: Addin("ActivityLog", "0.1")]
-[assembly: AddinDependency("OpenSim", "0.5")]
+[assembly: Addin("ActivityLog", OpenSim.VersionInfo.VersionNumber)]
+[assembly: AddinDependency("OpenSim.Region.Framework", OpenSim.VersionInfo.VersionNumber)]
 
 namespace OpenSim.Region.Framework.Interfaces
 {
